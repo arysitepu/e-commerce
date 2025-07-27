@@ -40,7 +40,11 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="/assets/vendor/jquery/jquery.min.js"></script>
+    {{-- <script src="/assets/vendor/jquery/jquery.min.js"></script> --}}
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
     <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
@@ -48,6 +52,7 @@
 
     <!-- Custom scripts for all pages-->
     <script src="/assets/js/sb-admin-2.min.js"></script>
+    @stack('scripts')
 </body>
 
 </html>
