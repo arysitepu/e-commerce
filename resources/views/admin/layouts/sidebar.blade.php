@@ -13,7 +13,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="/dashboard">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -36,8 +36,10 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Master Data</h6>
-                        <a class="collapse-item" href="/category">Category</a>
-                        <a class="collapse-item" href="/products">Product</a>
+                        <a class="collapse-item" href="/category">Category Sparepart</a>
+                        <a class="collapse-item" href="/product">Sparepart</a>
+                        <a class="collapse-item" href="/courier">Courier</a>
+                        <a class="collapse-item" href="/user">Users</a>
                     </div>
                 </div>
             </li>

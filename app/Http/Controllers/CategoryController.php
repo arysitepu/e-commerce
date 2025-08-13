@@ -10,7 +10,7 @@ class CategoryController extends Controller
 {
      public function index()
      {
-        return view('admin.category.index');
+        return view('admin.category.category-view');
      }
 
      public function getCategory()
@@ -21,7 +21,7 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-          $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'category_name' => 'required|string|max:255',
             'description' => 'required|string',
          ]);
@@ -67,7 +67,7 @@ class CategoryController extends Controller
 
     public function destroy($id)
     {
-         $category = Category::find($id);
+        $category = Category::find($id);
 
         if (!$category) {
             return response()->json(['message' => 'Category not found'], 404);

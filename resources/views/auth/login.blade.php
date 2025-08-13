@@ -23,20 +23,42 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Silahkan Login</h1>
                                     </div>
-                                    <form class="user">
+                                    @if(session()->has('error_message'))
+                                    <div class="alert alert-danger">
+                                        {{session()->get('error_message')}}
+                                    </div>
+                                    @endif
+
+                                        @if(session()->has('success_message'))
+                                    <div class="alert alert-success">
+                                        {{session()->get('success_message')}}
+                                    </div>
+                                    @endif
+                                    <form class="user" method="POST" action="/login-process">
+                                        @csrf
                                         <div class="form-group">
-                                            <input type="email" class="form-control form-control-user"
-                                                id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter Email Address...">
+                                            <input type="text" class="form-control form-control-user"
+                                                aria-describedby="emailHelp"
+                                                placeholder="Username" name="username">
+                                                @if($errors->has('username'))
+                                                <span class="text-danger">{{$errors->first('username')}}</span>
+                                                @endif
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Password">
+                                                id="exampleInputPassword" placeholder="Password" name="password">
+                                                @if($errors->has('password'))
+                                                <span class="text-danger">{{$errors->first('password')}}</span>
+                                                @endif
                                         </div>
                                        
-                                        <a href="index.html" class="btn btn-primary btn-user btn-block">
+                                        <button type="submit" class="btn btn-primary btn-user btn-block mb-2">
                                             Login
-                                        </a>
+                                        </button>
+                                        <div class="text-center">
+                                            <a class="small" href="/registrasi">Doesn't have account?. Register here!</a>
+                                        </div>
+                                        
                                     </form>
                                    
                                     
