@@ -40,6 +40,7 @@
                         <a class="collapse-item" href="/product">Sparepart</a>
                         <a class="collapse-item" href="/courier">Courier</a>
                         <a class="collapse-item" href="/user">Users</a>
+                        <a class="collapse-item" href="/rekening">Rekening</a>
                     </div>
                 </div>
             </li>
@@ -55,7 +56,7 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Transaction</h6>
-                        <a class="collapse-item" href="utilities-color.html">Koperasi</a>
+                        <a class="collapse-item" href="/order-admin">Order</a>
                     </div>
                 </div>
             </li>

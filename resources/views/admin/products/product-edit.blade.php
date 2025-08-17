@@ -13,7 +13,7 @@
                    {{session()->get('success_message')}}
                </div>
                @endif
-               @if(session()->has('error_message'))
+         @if(session()->has('error_message'))
            <div class="mt-3 alert alert-danger">
                {{session()->get('error_message')}}
            </div>

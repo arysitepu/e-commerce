@@ -6,8 +6,10 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CourierController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RajaOngkirController;
+use App\Http\Controllers\RekeningController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
@@ -54,6 +56,36 @@ Route::middleware(['auth', 'role:1'])->group(function () {
     Route::post('/user-save', [AuthController::class, 'store']);
     Route::patch('/user-update/{id}', [AuthController::class, 'update']);
     Route::delete('/user-delete/{id}', [AuthController::class, 'destroy']);
+    
+    // ORDER
+    Route::get('/order-admin', [OrderController::class, 'index']);
+    Route::get('/orders-admin', [OrderController::class, 'getOrder']);
+    Route::get('/order-detail/{id}', [OrderController::class, 'show']);
+    Route::get('/order-item/{id}', [OrderController::class, 'getOrderDetail'])->name('order.items');;
+    // BATAS
+    
+    // SHIPPING
+    Route::patch('/order-shipped/{id}', [OrderController::class, 'shipping']);
+    // BATAS
+    // COMPLETE
+    Route::patch('/order-complete/{id}', [OrderController::class, 'complete']);
+    // BATAS
+    // CANCEL
+    Route::patch('/order-cancel/{id}', [OrderController::class, 'cancel']);
+    // BATAS
+
+    // REKENING
+    Route::get('/rekening', [RekeningController::class, 'index']);
+    Route::get('/rekenings', [RekeningController::class, 'Rekenings']);
+    Route::post('/rekening-save', [RekeningController::class, 'store']);
+    Route::get('/rekening/{id}', [RekeningController::class, 'show']);
+    Route::patch('/update-rekening/{id}', [RekeningController::class, 'update']);
+    Route::delete('/rekening-delete/{id}', [RekeningController::class, 'destroy']);
+    // BATAS
+
+    // REPORT
+    Route::get('/report', [DashboardController::class, 'report']);
+    // BATAS
     // API RAJA ONGKIR
     // Route::get('/provinces', [RajaOngkirController::class, 'getProvinces']);
     // Route::get('/cities', [RajaOngkirController::class, 'getCities']);
@@ -66,5 +98,27 @@ Route::middleware(['auth', 'role:1,2'])->group(function () {
     Route::post('/cart-add', [CartController::class, 'addCart']);
     Route::patch('/update-qty/{id}', [CartController::class, 'updateQty']);
     Route::delete('/item-delete/{id}', [CartController::class, 'deleteItem']);
+    // CHECKOUT
+    Route::get('/checkout/{id}', [CartController::class, 'checkout']);
+    Route::patch('/checkout-update/{id}', [CartController::class, 'CheckoutUpdate']);
+    // BATAS
+
+    // PAYMENT
+    Route::get('/payment/{id}', [CartController::class, 'payment'])->name('payment');
+    Route::get('/invoice/{id}', [CartController::class, 'invoice'])->name('invoice');
+    Route::patch('/upload-bayar/{id}', [CartController::class, 'uploadBayar']);
+    // BATAS
+
+    // Pesanan
+    Route::get('/order', [HomeController::class, 'order']);
+    Route::get('/orders', [HomeController::class, 'orders']);
+    Route::get('/detail-order/{id}', [HomeController::class, 'detailOrder']);
+    // BATAS
+    
+    // PRODUCT ALL
+    Route::get('/product-all', [HomeController::class, 'productAll']);
+    Route::get('/search-product', [HomeController::class, 'search'])->name('search.product');
+    Route::get('/product/{id}', [HomeController::class, 'getProduct']);
+    // BATAS
 });
     

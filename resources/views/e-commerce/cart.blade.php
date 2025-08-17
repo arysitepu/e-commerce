@@ -1,9 +1,11 @@
 @extends('e-commerce.layouts-commerce.template-commerce')
 @section('content')
+@if($order && $order->status == 'pending')
  <section class="py-5 bg-secondary">
-    <div class="container-fluid">
+    <div class="container-fluid col-10">
         <div class="row justify-content-center">
-            <div class="card mt-3 col-md-8 col-12">
+            <div class="alert alert-info col-12 col-md-8 text-center"> Silahkan Click checkout untuk mengatur kurir, alaman pengantaran, dan metode pembayaran</div>
+            <div class="card col-md-8 col-12">
                 <div class="shadow">
                     <div class="card-body">
                         <div class="table-responsive">
@@ -82,9 +84,9 @@
             </div>
         </div>
 
-         <div class="row justify-content-center mb-5">
+         <div class="row justify-content-center mb-2">
             @foreach($orderItems as $item)
-            <div class="card mt-3 col-md-4 col-12" id="card-{{ $item->id }}>
+            <div class="card mt-3 col-md-4 col-12">
                 <div class="shadow">
                     <div class="card-body">
                         <div class="row justify-content-center">
@@ -152,10 +154,21 @@
             @endforeach
         </div>
 
+         <div class="row justify-content-center mb-5">
+            <a href="/checkout/{{$order->id}}" class="btn btn-primary col-md-8 col-12"> Checkout </a>
+         </div>
 
     </div>
  </section>
-
+@else  
+<section class="py-5 d-flex justify-content-center align-items-center bg-secondary" style="min-height: 100vh;">
+    <div class="container text-center">
+        <div class="alert alert-info">
+            MAU NGAPAIN HAYOOO
+        </div>
+    </div>
+</section>
+@endif
 @endsection
 @push('scripts')
 <script>
@@ -190,7 +203,7 @@
                                 timer: 2000,
                                 showConfirmButton: false
                             });
-                             $(`#card-${itemId}`).remove(); // refresh table
+                              location.reload();
                          },
                          error: function (xhr) {
                                 Swal.fire({

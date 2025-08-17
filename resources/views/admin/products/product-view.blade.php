@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header font-weight-bold text-center">Data News</div>
+                <div class="card-header font-weight-bold text-center">Data Product</div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="product-table" class="table display" style="width:100%">

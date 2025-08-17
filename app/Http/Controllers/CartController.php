@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Courier;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -15,11 +16,17 @@ class CartController extends Controller
     public function index()
     {
         $userId = Auth::id();
-        $order = Order::with('user', 'courier')->where('user_id', $userId)->first();
-        $orderItems = OrderItem::with('product')->where('order_id', $order->id)->orderBy('created_at', 'desc')->get();
+        $order = Order::with('user', 'courier')->where('user_id', $userId)->where('status', 'pending') ->orderBy('created_at', 'desc')->first();
+         $orderItems = collect();
+         $orderItemSum = 0;
+         if ($order) {
+             $orderItems = OrderItem::with('product')->where('order_id', $order->id)->orderBy('created_at', 'desc')->get();
+             $orderItemSum = OrderItem::where('order_id', $order->id)->sum('quantity');
+         }
         $data = [
             'order' => $order,
-            'orderItems' => $orderItems
+            'orderItems' => $orderItems,
+            'orderItemSum' => $orderItemSum
         ];
         return view('e-commerce.cart', $data);
     }
@@ -141,5 +148,100 @@ class CartController extends Controller
         'total_price_formatted' => number_format($totalPrice, 0, ',', '.')
         ], 200);
         return response()->json(['success_message' => 'Data deleted successfully'], 200);
+    }
+
+    public function checkout($id)
+    {
+        $order = Order::find($id);
+        $couriers = Courier::orderBy('created_at', 'desc')->get();
+        $data = [
+            'order' => $order,
+            'couriers' => $couriers
+        ];
+        return view('e-commerce.checkout', $data);
+    }
+
+    public function CheckoutUpdate(Request $request, $id)
+    {
+         $validator = Validator::make($request->all(), [
+            'courier_id' => 'required|numeric',
+            'alamat' => 'required|string',
+            'payment_method' => 'required|string|in:transfer,cod',
+        ]);
+        if($validator->fails()){
+            return redirect()->back()->with('error_message', 'Checkout gagal silahkan check inputan anda')->withErrors($validator)->withInput();
+        }
+
+        $courier_id = $request->input('courier_id');
+        $alamat = $request->input('alamat');
+        $payment_method = $request->input('payment_method');
+        $data = [
+            'courier_id' => $courier_id,
+            'alamat' => $alamat,
+            'payment_method' => $payment_method
+        ];
+        Order::where('id', $id)->update($data);
+        return redirect()->route('payment', $id)->with('success_message', 'Checkout berhasil silahkan lakukan pembayaran');
+    }
+
+
+    public function payment($id)
+    {
+        $order = Order::find($id);
+        $orderItems = OrderItem::with('product')->where('order_id', $order->id)->orderBy('created_at', 'desc')->get();
+        $orderItemSum = OrderItem::where('order_id', $order->id)->sum('quantity');
+        $data = [
+            'order' => $order,
+            'orderItems' => $orderItems,
+            'orderItemSum' => $orderItemSum
+        ];
+        return view('e-commerce.payment', $data);
+    }
+
+    public function uploadBayar(Request $request, $id)
+    {
+         $validator = Validator::make($request->all(), [
+            'bukti_bayar' => 'required|image|mimes:jpeg,png,jpg|max:5048'
+        ]);
+        if($validator->fails()){
+            return redirect()->back()->with('error_message', 'Payment gagal dilakukan')->withErrors($validator)->withInput();
+        }
+         $fotoName = null;
+        if($request->hasFile('bukti_bayar')){
+            $file = $request->file('bukti_bayar');
+            $extension = $file->getClientOriginalExtension();
+            $fotoName = 'Transfer-'.time() . '-'. $extension;
+            //   $fotoName = time().'-'.$file->getClientOriginalName();
+            $file->move(public_path('/assets/img/bukti-bayar'), $fotoName);
+        }
+
+        $orderItems = OrderItem::where('order_id', $id)->get();
+
+        foreach($orderItems as $item){
+            $product = Product::find($item->product_id);
+            $quantity = $product->stock - $item->quantity;
+            $product->stock = $quantity;
+            $product->save();
+        }
+
+         $data = [
+            'bukti_bayar' => $fotoName,
+            'status' => 'paid',
+        ];
+        Order::where('id', $id)->update($data);
+        return redirect()->route('invoice', $id)->with('success_message', 'Terima kasih telah melakukan pembayaran sparepart anda sedang disiapkan');
+    }
+
+    public function invoice($id)
+    {
+        $order = Order::with('user', 'courier')->find($id);
+        $orderItems = OrderItem::with('product')->where('order_id', $order->id)->orderBy('created_at', 'desc')->get();
+        $orderItemSum = OrderItem::where('order_id', $order->id)->sum('quantity');
+        $data = [
+            'order' => $order,
+            'orderItems' => $orderItems,
+            'orderItemSum' => $orderItemSum
+        ];
+        return view('e-commerce.invoice', $data);
     }
 }

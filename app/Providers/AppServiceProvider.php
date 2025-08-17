@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\Order;
+use App\Models\Rekening;
 use App\Models\User;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Auth;
@@ -41,8 +42,9 @@ class AppServiceProvider extends ServiceProvider
                 }
             }
             // BATAS
-             $view->with('cartCount', $cartCount);
+            $view->with('cartCount', $cartCount);
             $view->with('user', Auth::user());
+            $view->with('rekenings', Rekening::with('bank')->orderBy('created_at', 'desc')->get());
         });
     }
 }
